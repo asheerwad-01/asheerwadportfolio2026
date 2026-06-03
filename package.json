@@ -1,0 +1,11 @@
+{
+  "name": "portfolio-inamigos-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix portfolio-inamigos",
+    "build": "npm run build --prefix portfolio-inamigos",
+    "start": "npm run start --prefix portfolio-inamigos",
+    "lint": "npm run lint --prefix portfolio-inamigos"
+  }
+}
