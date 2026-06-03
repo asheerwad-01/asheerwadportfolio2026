@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useRef, useCallback, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useNavigate, useLocation } from "react-router-dom";
 import { gsap } from "gsap";
 
 interface PageTransitionContextType {
@@ -20,8 +20,8 @@ export function usePageTransition() {
 
 export function PageTransitionProvider({ children }: { children: React.ReactNode }) {
   const overlayRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter();
-  const pathname = usePathname();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const isTransitioningRef = useRef(false);
 
   const navigateTo = useCallback(
@@ -30,7 +30,7 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
       if (isTransitioningRef.current) return; // Prevent double-triggering
 
       if (!overlayRef.current) {
-        router.push(href);
+        navigate(href);
         return;
       }
 
@@ -50,12 +50,12 @@ export function PageTransitionProvider({ children }: { children: React.ReactNode
         stagger: 0.05,
         ease: "power3.inOut",
         onComplete: () => {
-          // Trigger route change inside Next.js
-          router.push(href);
+          // Trigger route change inside React Router
+          navigate(href);
         },
       });
     },
-    [router, pathname]
+    [navigate, pathname]
   );
 
   // Trigger the exit/reverse transition when the pathname changes (new page mounted)

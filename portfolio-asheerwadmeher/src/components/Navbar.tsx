@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 import { usePageTransition } from "./PageTransition";
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { navigateTo } = usePageTransition();
 

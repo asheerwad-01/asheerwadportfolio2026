@@ -22,7 +22,7 @@
   --font-bebas: "Bebas Neue", sans-serif;
   --font-space: "Space Mono", monospace;
   --font-inter: "Inter", sans-serif;
-  --font-reenie: var(--font-reenie), cursive;
+  --font-reenie: "Architects Daughter", cursive;
 
   --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-bounce: cubic-bezier(0.68, -0.55, 0.27, 1.55);

@@ -1,10 +1,10 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useLocation } from "react-router-dom";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 
 export default function Sidebar() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
 
   const currentIndex = NAV_LINKS.findIndex((l) => l.href === pathname);
   const sectionNumber = String(currentIndex + 1).padStart(2, "0");

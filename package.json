@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "npm run dev --prefix portfolio-inamigos",
-    "build": "npm run build --prefix portfolio-inamigos",
-    "start": "npm run start --prefix portfolio-inamigos",
-    "lint": "npm run lint --prefix portfolio-inamigos"
+    "dev": "npm run dev --prefix portfolio-asheerwadmeher",
+    "build": "npm run build --prefix portfolio-asheerwadmeher",
+    "preview": "npm run preview --prefix portfolio-asheerwadmeher",
+    "lint": "npm run lint --prefix portfolio-asheerwadmeher"
   }
 }

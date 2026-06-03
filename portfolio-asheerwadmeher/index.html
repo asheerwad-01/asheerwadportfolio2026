@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kaizen Edit — UI/UX & Graphics Designer</title>
+    <meta name="description" content="Portfolio of Kaizen Edit — UI/UX Design, Graphic Design, Motion Design & Web Development. Crafting immersive digital experiences." />
+    <meta name="keywords" content="UI/UX Designer, Graphic Designer, Motion Designer, Frontend Developer, Portfolio, Kaizen Edit, Sonepur, Odisha, India" />
+    <meta name="author" content="Kaizen Edit" />
+    <meta property="og:title" content="Kaizen Edit — UI/UX & Graphics Designer" />
+    <meta property="og:description" content="Crafting immersive digital experiences. UI/UX Design, Graphics, Motion & Web Development." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@100..900&family=Architects+Daughter&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Noise texture overlay -->
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- SVG Filters for scribble effects -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <defs>
+        <filter id="scribble-filter">
+          <feTurbulence
+            type="turbulence"
+            baseFrequency="0.05"
+            numOctaves="2"
+            result="noise"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="noise"
+            scale="3"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
