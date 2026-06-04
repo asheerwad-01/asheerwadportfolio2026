@@ -107,7 +107,7 @@ const VideoGridItem = ({
     >
       <video
         ref={videoRef}
-        src={src}
+        src={`${src}?v=2`}
         preload="metadata"
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         muted
@@ -445,7 +445,7 @@ export default function GalleryPage() {
             <div className="relative w-full h-full flex items-center justify-center rounded-lg overflow-hidden border border-surface-border bg-black select-none shadow-[0_0_60px_rgba(157,3,244,0.2)]">
               {gallery.images[lightboxIndex].endsWith(".mp4") ? (
                 <video
-                  src={gallery.images[lightboxIndex]}
+                  src={`${gallery.images[lightboxIndex]}?v=2`}
                   className="max-w-full max-h-[75vh] object-contain"
                   controls
                   autoPlay

@@ -153,7 +153,7 @@ function ProjectGallery({
       >
         {isVideo ? (
           <video
-            src={images[currentIndex]}
+            src={`${images[currentIndex]}?v=2`}
             preload="metadata"
             className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             muted
@@ -466,7 +466,7 @@ export default function WorkCategoryPage() {
                     >
                       {project.images?.[0].endsWith(".mp4") ? (
                         <video
-                          src={project.images?.[0]}
+                          src={`${project.images?.[0]}?v=2`}
                           preload="metadata"
                           className="w-full h-full object-cover transition-transform duration-700 group-hover/preview:scale-105"
                           muted
@@ -659,7 +659,7 @@ export default function WorkCategoryPage() {
             <div className="relative w-full h-full flex items-center justify-center rounded-lg overflow-hidden border border-surface-border bg-black select-none shadow-[0_0_60px_rgba(157,3,244,0.2)]">
               {lightboxImages[lightboxIndex].endsWith(".mp4") ? (
                 <video
-                  src={lightboxImages[lightboxIndex]}
+                  src={`${lightboxImages[lightboxIndex]}?v=2`}
                   className="max-w-full max-h-[75vh] object-contain"
                   controls
                   autoPlay
