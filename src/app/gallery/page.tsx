@@ -359,7 +359,7 @@ export default function GalleryPage() {
             className="btn-primary"
             data-cursor="pointer"
           >
-            Visit Deployed Site ↗
+            Visit Site ↗
           </a>
         )}
         <button

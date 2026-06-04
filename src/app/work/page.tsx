@@ -104,22 +104,6 @@ const CATEGORY_PROJECTS: Record<string, { title: string; subtitle: string; proje
         images: ["/DM Home.png"],
         galleryId: "dm-enterprises",
       },
-      {
-        id: "02",
-        title: "DevSpace Community Portal",
-        description: "A forum application facilitating real-time messaging, post creation, markdown rendering, and notification dispatch.",
-        deliverables: ["Database Schema Design", "REST API Development", "Socket.io Chat Flow", "State Management"],
-        tools: ["React", "Node.js", "Express", "MongoDB", "Socket.io"],
-        color: "#31A8FF",
-      },
-      {
-        id: "03",
-        title: "Pixel Asset Store",
-        description: "A digital asset marketplace integrated with Stripe payment gateways, download distribution systems, and seller dashboards.",
-        deliverables: ["Stripe Checkout Webhooks", "Asset Hosting Setup", "User Dashboards", "Transaction Reporting"],
-        tools: ["React", "Next.js", "Tailwind CSS", "PostgreSQL", "Stripe"],
-        color: "#A259FF",
-      },
     ],
   },
   "motion": {
