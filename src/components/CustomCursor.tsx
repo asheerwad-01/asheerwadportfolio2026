@@ -1,72 +1,31 @@
 "use client";
 
 import { useEffect, useRef, useCallback, useState } from "react";
-import { gsap } from "gsap";
 
 export default function CustomCursor() {
   const [mounted, setMounted] = useState(false);
-  const followerRef = useRef<HTMLDivElement>(null);
   const trailCanvasRef = useRef<HTMLCanvasElement>(null);
   const mousePos = useRef({ x: -100, y: -100 });
-  const followerPos = useRef({ x: -100, y: -100 });
-  const isTouch = useRef(false);
   const trailPointsRef = useRef<{ x: number; y: number; age: number }[]>([]);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     mousePos.current = { x: e.clientX, y: e.clientY };
-    
-    const points = trailPointsRef.current;
-    if (points.length === 0) {
-      points.push({ x: e.clientX, y: e.clientY, age: 0 });
-      return;
-    }
-
-    const lastPoint = points[points.length - 1];
-    const dx = e.clientX - lastPoint.x;
-    const dy = e.clientY - lastPoint.y;
-    
-    // Only add a new point if the mouse has moved at least 4 pixels (dx^2 + dy^2 > 16)
-    // to prevent point explosion on high-polling-rate gaming mice.
-    if (dx * dx + dy * dy > 16) {
-      points.push({
-        x: e.clientX,
-        y: e.clientY,
-        age: 0,
-      });
-    }
   }, []);
 
   useEffect(() => {
     // Check if the device is touch-only (no mouse pointer present)
     const isTouchOnly = window.matchMedia("(pointer: coarse)").matches && !window.matchMedia("(pointer: fine)").matches;
     if (isTouchOnly) {
-      isTouch.current = true;
       return;
     }
 
     if (!mounted) {
       setMounted(true);
-      document.body.classList.add("has-custom-cursor");
       return;
     }
 
     window.addEventListener("mousemove", handleMouseMove);
 
-    // GSAP ticker for smooth cursor follow
-    const ticker = () => {
-      const follower = followerRef.current;
-      if (!follower) return;
-
-      // Lerp follower position (slightly faster since it is the main cursor element)
-      followerPos.current.x += (mousePos.current.x - followerPos.current.x) * 0.25;
-      followerPos.current.y += (mousePos.current.y - followerPos.current.y) * 0.25;
-
-      follower.style.transform = `translate(${followerPos.current.x - 4}px, ${followerPos.current.y - 4}px)`;
-    };
-
-    gsap.ticker.add(ticker);
-
-    // Trail effect on canvas
     const canvas = trailCanvasRef.current;
     let animationId: number;
 
@@ -88,9 +47,19 @@ export default function CustomCursor() {
 
       const drawTrail = () => {
         if (!ctx) return;
-        
+
         // Clear canvas using logical dimensions
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+        // Add the current mouse position as a new trail point on this frame
+        // (only if the mouse is on the screen/has moved from initial state)
+        if (mousePos.current.x !== -100) {
+          trailPointsRef.current.push({
+            x: mousePos.current.x,
+            y: mousePos.current.y,
+            age: 0,
+          });
+        }
 
         // Update age of points
         const points = trailPointsRef.current;
@@ -98,8 +67,8 @@ export default function CustomCursor() {
           points[i].age += 1;
         }
 
-        // Keep points younger than 20 frames (approx 330ms) for a much faster fade
-        const maxAge = 20;
+        // Keep points younger than 16 frames (approx 260ms at 60fps) for a smooth, fast-decaying trail
+        const maxAge = 16;
         trailPointsRef.current = points.filter((p) => p.age < maxAge);
 
         const activePoints = trailPointsRef.current;
@@ -108,24 +77,25 @@ export default function CustomCursor() {
           ctx.lineCap = "round";
           ctx.lineJoin = "round";
           ctx.shadowColor = "rgba(157, 3, 244, 0.5)";
-          ctx.shadowBlur = 5;
+          ctx.shadowBlur = 6;
 
           for (let i = 1; i < activePoints.length; i++) {
             const p1 = activePoints[i - 1];
             const p2 = activePoints[i];
 
-            // Taper and fade based on point age
-            const pct = 1 - p2.age / maxAge; // 1.0 (newest) to 0.0 (oldest)
+            // Taper and fade based on the position in the trail array
+            // Oldest points are at index 0 (thin & faded), newest point at index length-1 (thick & bright)
+            const pct = i / (activePoints.length - 1);
 
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
 
-            // Sleeker trail thickness: starts at 3px and tapers down to 1px
-            ctx.lineWidth = 2.0 * pct + 1.0; 
-            
-            // Fades from 0.8 down to 0.2 opacity
-            ctx.strokeStyle = `rgba(197, 77, 255, ${0.2 + 0.6 * pct})`; 
+            // Sleek trail width: starts at 0.5px and tapers up to 3.5px at the cursor
+            ctx.lineWidth = 3.0 * pct + 0.5;
+
+            // Fades from 0.05 opacity at the tail to 0.8 opacity at the cursor
+            ctx.strokeStyle = `rgba(197, 77, 255, ${0.05 + 0.75 * pct})`;
 
             ctx.stroke();
           }
@@ -137,85 +107,22 @@ export default function CustomCursor() {
       drawTrail();
 
       return () => {
-        document.body.classList.remove("has-custom-cursor");
         window.removeEventListener("mousemove", handleMouseMove);
         window.removeEventListener("resize", handleResize);
-        gsap.ticker.remove(ticker);
         cancelAnimationFrame(animationId);
       };
     }
-
-    return () => {
-      document.body.classList.remove("has-custom-cursor");
-      window.removeEventListener("mousemove", handleMouseMove);
-      gsap.ticker.remove(ticker);
-    };
   }, [mounted, handleMouseMove]);
 
-  // Hover state handlers for the follower pixel dot
-  useEffect(() => {
-    if (isTouch.current) return;
-
-    const follower = followerRef.current;
-    if (!follower) return;
-
-    const handleHoverIn = (e: Event) => {
-      const target = e.target as HTMLElement;
-      const el = target.closest("a, button, [data-cursor='pointer']");
-      if (el) {
-        gsap.to(follower, {
-          scale: 1.8,
-          backgroundColor: "#FF007F", // Neon pink hover color
-          boxShadow: "0 0 12px rgba(255, 0, 127, 0.8)",
-          duration: 0.25,
-          ease: "power2.out",
-        });
-      }
-    };
-
-    const handleHoverOut = () => {
-      gsap.to(follower, {
-        scale: 1.0,
-        backgroundColor: "#9D03F4", // Original purple color
-        boxShadow: "0 0 8px rgba(197, 77, 255, 0.5)",
-        duration: 0.25,
-        ease: "power2.out",
-      });
-    };
-
-    document.addEventListener("mouseover", handleHoverIn);
-    document.addEventListener("mouseout", handleHoverOut);
-
-    return () => {
-      document.removeEventListener("mouseover", handleHoverIn);
-      document.removeEventListener("mouseout", handleHoverOut);
-    };
-  }, []);
-
-  if (!mounted || isTouch.current) {
+  if (!mounted) {
     return null;
   }
 
   return (
-    <>
-      {/* Trail canvas */}
-      <canvas
-        ref={trailCanvasRef}
-        className="fixed inset-0 pointer-events-none z-[9997]"
-        style={{ opacity: 1.0 }}
-      />
-
-      {/* Follower pixel square */}
-      <div
-        ref={followerRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
-        style={{
-          width: 8,
-          height: 8,
-          background: "#9D03F4",
-          boxShadow: "0 0 8px rgba(197,77,255,0.5)",
-        }}
-      />
-    </>
+    <canvas
+      ref={trailCanvasRef}
+      className="fixed inset-0 pointer-events-none z-[9997]"
+      style={{ opacity: 1.0 }}
+    />
   );
 }
