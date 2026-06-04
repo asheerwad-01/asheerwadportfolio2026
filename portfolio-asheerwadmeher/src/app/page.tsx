@@ -22,51 +22,76 @@ export default function HomePage() {
   useEffect(() => {
     if (!nameRef.current) return;
 
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const chars = nameRef.current.querySelectorAll(".hero-char");
 
-    // Text scramble effect
-    chars.forEach((char) => {
-      const original = char.textContent || "";
-      const scrambleChars = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`";
+    if (!isMobile) {
+      // Text scramble effect - Desktop only
+      chars.forEach((char) => {
+        const original = char.textContent || "";
+        const scrambleChars = "!@#$%^&*()_+-=[]{}|;:,.<>?/~`";
 
-      // Initial scramble
-      let scrambleCount = 0;
-      const scrambleInterval = setInterval(() => {
-        if (scrambleCount > 6) {
-          clearInterval(scrambleInterval);
-          char.textContent = original;
-          return;
-        }
-        char.textContent =
-          scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
-        scrambleCount++;
-      }, 50);
-    });
+        // Initial scramble
+        let scrambleCount = 0;
+        const scrambleInterval = setInterval(() => {
+          if (scrambleCount > 6) {
+            clearInterval(scrambleInterval);
+            char.textContent = original;
+            return;
+          }
+          char.textContent =
+            scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+          scrambleCount++;
+        }, 50);
+      });
+    }
 
-    // GSAP entrance animation with ScrollTrigger for replay
+    // GSAP entrance animation
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        chars,
-        {
-          y: 80,
-          opacity: 0,
-          rotateX: -90,
-        },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          stagger: 0.04,
-          duration: 0.8,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: nameRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
+      if (isMobile) {
+        // Mobile: 2D character stagger, smooth and lively, replays always
+        gsap.fromTo(
+          chars,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: nameRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        // Desktop: High-end character stagger, replayable on scroll
+        gsap.fromTo(
+          chars,
+          {
+            y: 80,
+            opacity: 0,
+            rotateX: -90,
           },
-        }
-      );
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            stagger: 0.04,
+            duration: 0.8,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: nameRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
     });
 
     return () => ctx.revert();
@@ -76,15 +101,17 @@ export default function HomePage() {
   useEffect(() => {
     if (!heroImageRef.current) return;
 
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         heroImageRef.current,
-        { y: 50, scale: 0.95, opacity: 0 },
+        { y: isMobile ? 30 : 50, scale: isMobile ? 1 : 0.95, opacity: 0 },
         {
           y: 0,
           scale: 1,
           opacity: 1,
-          duration: 1,
+          duration: isMobile ? 0.7 : 1,
           ease: "power3.out",
           scrollTrigger: {
             trigger: heroImageRef.current,
@@ -104,26 +131,49 @@ export default function HomePage() {
     if (!workRef.current) return;
 
     const cards = workRef.current.querySelectorAll(".work-card");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        cards,
-        { y: 100, opacity: 0, scale: 0.9 },
-        {
-          y: 0,
-          opacity: 1,
-          scale: 1,
-          stagger: 0.15,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: workRef.current,
-            start: "top 80%",
-            end: "bottom 20%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        // Mobile: 2D stagger, lively but smooth, replays always
+        gsap.fromTo(
+          cards,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: workRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        // Desktop: Staggered entrance, replayable
+        gsap.fromTo(
+          cards,
+          { y: 100, opacity: 0, scale: 0.9 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: workRef.current,
+              start: "top 80%",
+              end: "bottom 20%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
     });
 
     return () => ctx.revert();
@@ -134,25 +184,46 @@ export default function HomePage() {
     if (!statsRef.current) return;
 
     const statItems = statsRef.current.querySelectorAll(".stat-value");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        statsRef.current!.querySelectorAll(".stat-card"),
-        { y: 60, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.6,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        gsap.fromTo(
+          statsRef.current!.querySelectorAll(".stat-card"),
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          statsRef.current!.querySelectorAll(".stat-card"),
+          { y: 60, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
 
       // Counter animation
       statItems.forEach((item) => {
@@ -164,13 +235,14 @@ export default function HomePage() {
 
           ScrollTrigger.create({
             trigger: item,
-            start: "top 85%",
-            end: "bottom 15%",
+            start: isMobile ? "top 95%" : "top 85%",
+            end: isMobile ? "bottom 5%" : "bottom 15%",
+            toggleActions: "play reverse play reverse",
             onEnter: () => {
               const obj = { val: 0 };
               gsap.to(obj, {
                 val: target,
-                duration: 1.5,
+                duration: isMobile ? 1.2 : 1.5,
                 ease: "power2.out",
                 onUpdate: () => {
                   item.textContent = Math.round(obj.val) + suffix;
@@ -184,7 +256,7 @@ export default function HomePage() {
               const obj = { val: 0 };
               gsap.to(obj, {
                 val: target,
-                duration: 1.5,
+                duration: isMobile ? 1.2 : 1.5,
                 ease: "power2.out",
                 onUpdate: () => {
                   item.textContent = Math.round(obj.val) + suffix;

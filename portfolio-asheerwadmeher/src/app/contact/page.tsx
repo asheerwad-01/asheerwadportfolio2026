@@ -58,49 +58,74 @@ export default function ContactPage() {
   // Heading animation
   useEffect(() => {
     if (!headingRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const chars = headingRef.current.querySelectorAll(".contact-char");
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        chars,
-        { y: 100, opacity: 0, rotateX: -90 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          stagger: 0.04,
-          duration: 0.7,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        // Mobile: 2D character stagger, smooth and lively, replays always
+        gsap.fromTo(
+          chars,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          chars,
+          { y: 100, opacity: 0, rotateX: -90 },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            stagger: 0.04,
+            duration: 0.7,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
     });
     return () => ctx.revert();
   }, []);
 
   // Info & form animations
   useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     const ctx = gsap.context(() => {
       if (infoRef.current) {
         const items = infoRef.current.querySelectorAll(".info-item");
         gsap.fromTo(
           items,
-          { x: -40, opacity: 0 },
+          { y: isMobile ? 25 : 0, x: isMobile ? 0 : -40, opacity: 0 },
           {
+            y: 0,
             x: 0,
             opacity: 1,
-            stagger: 0.1,
+            stagger: isMobile ? 0.05 : 0.1,
             duration: 0.6,
             ease: "power3.out",
             scrollTrigger: {
               trigger: infoRef.current,
-              start: "top 85%",
-              end: "bottom 15%",
+              start: isMobile ? "top 90%" : "top 85%",
+              end: isMobile ? "bottom 10%" : "bottom 15%",
               toggleActions: "play reverse play reverse",
             },
           }
@@ -110,16 +135,17 @@ export default function ContactPage() {
       if (formRef.current) {
         gsap.fromTo(
           formRef.current,
-          { x: 40, opacity: 0 },
+          { y: isMobile ? 30 : 0, x: isMobile ? 0 : 40, opacity: 0 },
           {
+            y: 0,
             x: 0,
             opacity: 1,
-            duration: 0.8,
+            duration: isMobile ? 0.6 : 0.8,
             ease: "power3.out",
             scrollTrigger: {
               trigger: formRef.current,
-              start: "top 85%",
-              end: "bottom 15%",
+              start: isMobile ? "top 90%" : "top 85%",
+              end: isMobile ? "bottom 10%" : "bottom 15%",
               toggleActions: "play reverse play reverse",
             },
           }
@@ -132,19 +158,21 @@ export default function ContactPage() {
   // Map animation
   useEffect(() => {
     if (!mapRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         mapRef.current,
-        { y: 50, opacity: 0 },
+        { y: isMobile ? 30 : 50, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 0.8,
+          duration: isMobile ? 0.6 : 0.8,
           ease: "power3.out",
           scrollTrigger: {
             trigger: mapRef.current,
-            start: "top 90%",
-            end: "bottom 15%",
+            start: isMobile ? "top 92%" : "top 90%",
+            end: isMobile ? "bottom 8%" : "bottom 15%",
             toggleActions: "play reverse play reverse",
           },
         }

@@ -16,27 +16,49 @@ export default function LabPage() {
   // Heading animation
   useEffect(() => {
     if (!headingRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const chars = headingRef.current.querySelectorAll(".lab-char");
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        chars,
-        { y: 100, opacity: 0, rotateX: -90 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          stagger: 0.05,
-          duration: 0.7,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        // Mobile: 2D character stagger, smooth and lively, replays always
+        gsap.fromTo(
+          chars,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          chars,
+          { y: 100, opacity: 0, rotateX: -90 },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            stagger: 0.05,
+            duration: 0.7,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
     });
     return () => ctx.revert();
   }, []);
@@ -45,30 +67,50 @@ export default function LabPage() {
   useEffect(() => {
     if (!experimentsRef.current) return;
     const cards = experimentsRef.current.querySelectorAll(".experiment-card");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
       cards.forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          {
-            y: 80,
-            opacity: 0,
-            x: i % 2 === 0 ? -30 : 30,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            x: 0,
-            duration: 0.7,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 88%",
-              end: "bottom 12%",
-              toggleActions: "play reverse play reverse",
+        if (isMobile) {
+          gsap.fromTo(
+            card,
+            { y: 30, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+        } else {
+          gsap.fromTo(
+            card,
+            {
+              y: 80,
+              opacity: 0,
+              x: i % 2 === 0 ? -30 : 30,
             },
-          }
-        );
+            {
+              y: 0,
+              opacity: 1,
+              x: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 88%",
+                end: "bottom 12%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+        }
       });
     });
     return () => ctx.revert();

@@ -121,27 +121,49 @@ export default function AboutPage() {
   // Heading animation
   useEffect(() => {
     if (!headingRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const chars = headingRef.current.querySelectorAll(".about-char");
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        chars,
-        { y: 100, opacity: 0, rotateX: -90 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          stagger: 0.04,
-          duration: 0.7,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        // Mobile: 2D character stagger, smooth and lively, replays always
+        gsap.fromTo(
+          chars,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          chars,
+          { y: 100, opacity: 0, rotateX: -90 },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            stagger: 0.04,
+            duration: 0.7,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
     });
     return () => ctx.revert();
   }, []);
@@ -151,25 +173,46 @@ export default function AboutPage() {
     if (!statsRef.current) return;
     const statCards = statsRef.current.querySelectorAll(".stat-card");
     const statValues = statsRef.current.querySelectorAll(".stat-value");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        statCards,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.6,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        gsap.fromTo(
+          statCards,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.08,
+            duration: 0.5,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          statCards,
+          { y: 50, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.1,
+            duration: 0.6,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: statsRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
 
       statValues.forEach((item) => {
         const text = item.textContent || "";
@@ -180,13 +223,14 @@ export default function AboutPage() {
 
           ScrollTrigger.create({
             trigger: item,
-            start: "top 85%",
-            end: "bottom 15%",
+            start: isMobile ? "top 95%" : "top 85%",
+            end: isMobile ? "bottom 5%" : "bottom 15%",
+            toggleActions: "play reverse play reverse",
             onEnter: () => {
               const obj = { val: 0 };
               gsap.to(obj, {
                 val: target,
-                duration: 1.5,
+                duration: isMobile ? 1.2 : 1.5,
                 ease: "power2.out",
                 onUpdate: () => {
                   item.textContent = Math.round(obj.val) + suffix;
@@ -200,7 +244,7 @@ export default function AboutPage() {
               const obj = { val: 0 };
               gsap.to(obj, {
                 val: target,
-                duration: 1.5,
+                duration: isMobile ? 1.2 : 1.5,
                 ease: "power2.out",
                 onUpdate: () => {
                   item.textContent = Math.round(obj.val) + suffix;
@@ -218,6 +262,7 @@ export default function AboutPage() {
   useEffect(() => {
     if (!skillsRef.current) return;
     const bars = skillsRef.current.querySelectorAll(".skill-fill");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
       bars.forEach((bar) => {
@@ -227,12 +272,12 @@ export default function AboutPage() {
           { width: "0%" },
           {
             width: `${target}%`,
-            duration: 1.2,
+            duration: isMobile ? 0.8 : 1.2,
             ease: "power3.out",
             scrollTrigger: {
               trigger: bar,
-              start: "top 90%",
-              end: "bottom 10%",
+              start: isMobile ? "top 95%" : "top 90%",
+              end: isMobile ? "bottom 5%" : "bottom 10%",
               toggleActions: "play reverse play reverse",
             },
           }
@@ -244,20 +289,22 @@ export default function AboutPage() {
 
   // Story & tools animation
   useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     const ctx = gsap.context(() => {
       if (storyRef.current) {
         gsap.fromTo(
           storyRef.current,
-          { y: 60, opacity: 0 },
+          { y: isMobile ? 30 : 60, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.8,
+            duration: isMobile ? 0.6 : 0.8,
             ease: "power3.out",
             scrollTrigger: {
               trigger: storyRef.current,
-              start: "top 85%",
-              end: "bottom 15%",
+              start: isMobile ? "top 90%" : "top 85%",
+              end: isMobile ? "bottom 10%" : "bottom 15%",
               toggleActions: "play reverse play reverse",
             },
           }
@@ -268,18 +315,18 @@ export default function AboutPage() {
         const tools = toolsRef.current.querySelectorAll(".tool-icon");
         gsap.fromTo(
           tools,
-          { y: 30, opacity: 0, rotateY: -30 },
+          { y: isMobile ? 20 : 30, opacity: 0, rotateY: isMobile ? 0 : -30 },
           {
             y: 0,
             opacity: 1,
             rotateY: 0,
-            stagger: 0.08,
-            duration: 0.5,
+            stagger: isMobile ? 0.04 : 0.08,
+            duration: isMobile ? 0.4 : 0.5,
             ease: "power3.out",
             scrollTrigger: {
               trigger: toolsRef.current,
-              start: "top 85%",
-              end: "bottom 15%",
+              start: isMobile ? "top 90%" : "top 85%",
+              end: isMobile ? "bottom 10%" : "bottom 15%",
               toggleActions: "play reverse play reverse",
             },
           }

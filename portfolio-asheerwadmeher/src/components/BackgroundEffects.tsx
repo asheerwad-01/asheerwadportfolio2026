@@ -43,26 +43,32 @@ export default function BackgroundEffects() {
       color: string;
     }
 
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const particleCount = isMobile ? 15 : 35;
     const particles: Particle[] = [];
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        size: Math.random() * 4 + 2,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: (Math.random() - 0.5) * 0.3,
+        size: Math.random() * (isMobile ? 3 : 4) + 2,
+        speedX: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
+        speedY: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.3),
         opacity: Math.random() * 0.3 + 0.05,
         opacityDir: Math.random() > 0.5 ? 0.002 : -0.002,
         color: particleColors[Math.floor(Math.random() * particleColors.length)],
       });
     }
 
-    // Glow spots
-    const glowSpots = [
-      { x: 0.2, y: 0.3, radius: 200, opacity: 0.04, phase: 0 },
-      { x: 0.8, y: 0.6, radius: 150, opacity: 0.03, phase: Math.PI },
-      { x: 0.5, y: 0.8, radius: 180, opacity: 0.025, phase: Math.PI / 2 },
-    ];
+    // Glow spots - fewer and smaller on mobile to optimize canvas fill-rate
+    const glowSpots = isMobile
+      ? [
+        { x: 0.5, y: 0.4, radius: 120, opacity: 0.035, phase: 0 },
+      ]
+      : [
+        { x: 0.2, y: 0.3, radius: 200, opacity: 0.04, phase: 0 },
+        { x: 0.8, y: 0.6, radius: 150, opacity: 0.03, phase: Math.PI },
+        { x: 0.5, y: 0.8, radius: 180, opacity: 0.025, phase: Math.PI / 2 },
+      ];
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);

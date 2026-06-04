@@ -19,27 +19,49 @@ export default function ServicesPage() {
   // Heading animation
   useEffect(() => {
     if (!headingRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
     const chars = headingRef.current.querySelectorAll(".svc-char");
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        chars,
-        { y: 100, opacity: 0, rotateX: -90 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          stagger: 0.04,
-          duration: 0.7,
-          ease: "back.out(1.7)",
-          scrollTrigger: {
-            trigger: headingRef.current,
-            start: "top 85%",
-            end: "bottom 15%",
-            toggleActions: "play reverse play reverse",
-          },
-        }
-      );
+      if (isMobile) {
+        // Mobile: 2D character stagger, smooth and lively, replays always
+        gsap.fromTo(
+          chars,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.03,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 90%",
+              end: "bottom 10%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      } else {
+        gsap.fromTo(
+          chars,
+          { y: 100, opacity: 0, rotateX: -90 },
+          {
+            y: 0,
+            opacity: 1,
+            rotateX: 0,
+            stagger: 0.04,
+            duration: 0.7,
+            ease: "back.out(1.7)",
+            scrollTrigger: {
+              trigger: headingRef.current,
+              start: "top 85%",
+              end: "bottom 15%",
+              toggleActions: "play reverse play reverse",
+            },
+          }
+        );
+      }
     });
     return () => ctx.revert();
   }, []);
@@ -48,25 +70,47 @@ export default function ServicesPage() {
   useEffect(() => {
     if (!timelineRef.current) return;
     const cards = timelineRef.current.querySelectorAll(".timeline-card");
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
     const ctx = gsap.context(() => {
       cards.forEach((card, i) => {
-        gsap.fromTo(
-          card,
-          { x: i % 2 === 0 ? -60 : 60, opacity: 0 },
-          {
-            x: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: card,
-              start: "top 85%",
-              end: "bottom 15%",
-              toggleActions: "play reverse play reverse",
-            },
-          }
-        );
+        if (isMobile) {
+          // Mobile: Fade and slide up slightly, no horizontal translation, replayable always
+          gsap.fromTo(
+            card,
+            { y: 30, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.6,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                end: "bottom 10%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+        } else {
+          // Desktop: Slide in from left/right, replayable on scroll
+          gsap.fromTo(
+            card,
+            { x: i % 2 === 0 ? -60 : 60, opacity: 0 },
+            {
+              x: 0,
+              opacity: 1,
+              duration: 0.7,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+                end: "bottom 15%",
+                toggleActions: "play reverse play reverse",
+              },
+            }
+          );
+        }
       });
     });
     return () => ctx.revert();
@@ -75,20 +119,22 @@ export default function ServicesPage() {
   // CTA animation
   useEffect(() => {
     if (!ctaRef.current) return;
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
     const ctx = gsap.context(() => {
       gsap.fromTo(
         ctaRef.current,
-        { y: 40, opacity: 0, scale: 0.95 },
+        { y: isMobile ? 25 : 40, opacity: 0, scale: isMobile ? 1 : 0.95 },
         {
           y: 0,
-          opacity: 1,
           scale: 1,
-          duration: 0.6,
+          opacity: 1,
+          duration: isMobile ? 0.5 : 0.6,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ctaRef.current,
-            start: "top 90%",
-            end: "bottom 15%",
+            start: isMobile ? "top 95%" : "top 90%",
+            end: isMobile ? "bottom 5%" : "bottom 15%",
             toggleActions: "play reverse play reverse",
           },
         }

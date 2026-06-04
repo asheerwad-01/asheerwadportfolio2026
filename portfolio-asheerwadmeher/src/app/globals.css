@@ -30,7 +30,8 @@
 }
 
 /* ─── Base Reset ─── */
-* {
+body.has-custom-cursor,
+body.has-custom-cursor * {
   cursor: none !important;
 }
 
