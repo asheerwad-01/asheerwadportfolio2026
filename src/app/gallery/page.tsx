@@ -106,6 +106,7 @@ const VideoGridItem = ({
       <video
         ref={videoRef}
         src={src}
+        preload="none"
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         muted
         loop

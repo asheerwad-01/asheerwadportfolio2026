@@ -457,14 +457,32 @@ export default function HomePage() {
                 className="work-card group relative overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-500 hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.1)] block"
                 data-cursor="pointer"
               >
-                {/* Project Image */}
+                 {/* Project Image - Creative Typography Layout */}
                 <div className="relative h-56 overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-surface-light to-bg transition-transform duration-700 group-hover:scale-110">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="font-bebas text-6xl text-neon/20 group-hover:text-neon/40 transition-colors duration-500">
-                        {item.id}
-                      </span>
-                    </div>
+                  <div className="w-full h-full bg-gradient-to-br from-surface-light to-bg transition-transform duration-700 group-hover:scale-105 flex items-center justify-center relative">
+                    {/* Glowing grid background effect */}
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(157,3,244,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(157,3,244,0.05)_1px,transparent_1px)] bg-[size:16px_16px] [mask-image:radial-gradient(ellipse_at_center,white,transparent_80%)]" />
+
+                    {/* Huge outline background typography */}
+                    <span 
+                      className="font-bebas text-7xl md:text-8xl absolute select-none tracking-widest uppercase transition-all duration-700 opacity-20 group-hover:opacity-40 group-hover:scale-110"
+                      style={{
+                        WebkitTextStroke: "1px rgba(197, 77, 255, 0.4)",
+                        color: "transparent",
+                      }}
+                    >
+                      {item.slug === "ui-ux" ? "UI/UX" : item.slug === "graphics" ? "ART" : item.slug === "web-dev" ? "CODE" : "AMV"}
+                    </span>
+
+                    {/* Centered big glowing number */}
+                    <span className="font-bebas text-5xl md:text-6xl text-white/95 group-hover:text-neon transition-colors duration-500 z-10 drop-shadow-[0_0_10px_rgba(157,3,244,0.5)]">
+                      {item.id}
+                    </span>
+
+                    {/* Tiny cyberpunk tech code tag */}
+                    <span className="absolute bottom-4 font-space text-[9px] tracking-[0.3em] text-text-dim uppercase z-10 group-hover:text-white transition-colors duration-300">
+                      {item.slug === "ui-ux" ? "SYS_INTERFACE" : item.slug === "graphics" ? "VISUAL_IDENT" : item.slug === "web-dev" ? "FULLSTACK_APP" : "MOTION_GRAPHICS"}
+                    </span>
                   </div>
 
                   {/* Hover glow overlay */}

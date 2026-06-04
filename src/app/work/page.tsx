@@ -153,6 +153,7 @@ function ProjectGallery({
         {isVideo ? (
           <video
             src={images[currentIndex]}
+            preload="metadata"
             className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             muted
             loop
@@ -462,6 +463,7 @@ export default function WorkCategoryPage() {
                       {project.images?.[0].endsWith(".mp4") ? (
                         <video
                           src={project.images?.[0]}
+                          preload="metadata"
                           className="w-full h-full object-cover transition-transform duration-700 group-hover/preview:scale-105"
                           muted
                           loop
