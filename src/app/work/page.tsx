@@ -150,10 +150,12 @@ function ProjectGallery({
   images,
   title,
   color,
+  onImageClick,
 }: {
   images: string[];
   title: string;
   color: string;
+  onImageClick: (index: number) => void;
 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -161,21 +163,19 @@ function ProjectGallery({
 
   return (
     <div className="relative w-full h-full group/gallery overflow-hidden flex items-center justify-center bg-black">
-      {/* Active Image - click to view in separate window */}
-      <a
-        href={images[currentIndex]}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="w-full h-full block cursor-pointer"
+      {/* Active Image */}
+      <button
+        onClick={() => onImageClick(currentIndex)}
+        className="w-full h-full block cursor-pointer text-left focus:outline-none"
         data-cursor="pointer"
-        title="View full resolution image in separate window"
+        title="Click to view fullscreen popup"
       >
         <img
           src={images[currentIndex]}
           alt={`${title} Screenshot ${currentIndex + 1}`}
           className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
         />
-      </a>
+      </button>
 
       {/* Navigation arrows (only if > 1 image) */}
       {images.length > 1 && (
@@ -183,6 +183,7 @@ function ProjectGallery({
           <button
             onClick={(e) => {
               e.preventDefault();
+              e.stopPropagation();
               setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
             }}
             className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-bg/85 border border-surface-border text-white flex items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition-opacity hover:border-neon text-xs font-bold shadow-lg"
@@ -194,6 +195,7 @@ function ProjectGallery({
           <button
             onClick={(e) => {
               e.preventDefault();
+              e.stopPropagation();
               setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
             }}
             className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-bg/85 border border-surface-border text-white flex items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition-opacity hover:border-neon text-xs font-bold shadow-lg"
@@ -213,6 +215,7 @@ function ProjectGallery({
               key={idx}
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 setCurrentIndex(idx);
               }}
               className="w-1.5 h-1.5 rounded-full transition-all"
@@ -236,6 +239,11 @@ export default function WorkCategoryPage() {
 
   const categoryData = category ? CATEGORY_PROJECTS[category] : null;
 
+  // Lightbox overlay state
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState<number>(0);
+  const [lightboxOpen, setLightboxOpen] = useState<boolean>(false);
+
   // Dynamically set page title
   useEffect(() => {
     if (categoryData) {
@@ -244,6 +252,24 @@ export default function WorkCategoryPage() {
       document.title = "Work Portfolio — Kaizen Edit";
     }
   }, [categoryData]);
+
+  // Keyboard navigation for Lightbox
+  useEffect(() => {
+    if (!lightboxOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setLightboxOpen(false);
+      } else if (e.key === "ArrowLeft" && lightboxImages.length > 1) {
+        setLightboxIndex((prev) => (prev === 0 ? lightboxImages.length - 1 : prev - 1));
+      } else if (e.key === "ArrowRight" && lightboxImages.length > 1) {
+        setLightboxIndex((prev) => (prev === lightboxImages.length - 1 ? 0 : prev + 1));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [lightboxOpen, lightboxImages]);
 
   // Heading Animation
   useEffect(() => {
@@ -439,6 +465,11 @@ export default function WorkCategoryPage() {
                       images={project.images}
                       title={project.title}
                       color={project.color}
+                      onImageClick={(index) => {
+                        setLightboxImages(project.images || []);
+                        setLightboxIndex(index);
+                        setLightboxOpen(true);
+                      }}
                     />
                   ) : (
                     <>
@@ -542,6 +573,85 @@ export default function WorkCategoryPage() {
           ← Back to Homepage
         </a>
       </section>
+
+      {/* ═══ LIGHTBOX POPUP MODAL ═══ */}
+      {lightboxOpen && lightboxImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[9999] bg-bg/98 backdrop-blur-md flex items-center justify-center p-4 md:p-8"
+          style={{
+            animation: "workFadeIn 0.25s ease-out",
+          }}
+        >
+          <style dangerouslySetInnerHTML={{__html: `
+            @keyframes workFadeIn {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+          `}} />
+
+          {/* Close Overlay by clicking background */}
+          <div
+            className="absolute inset-0 cursor-default"
+            onClick={() => setLightboxOpen(false)}
+          />
+
+          <div className="relative max-w-6xl w-full max-h-[85vh] flex flex-col items-center justify-center z-10">
+            {/* Close Button */}
+            <button
+              onClick={() => setLightboxOpen(false)}
+              className="absolute -top-12 right-0 md:right-4 w-10 h-10 flex items-center justify-center border border-surface-border bg-surface/90 hover:border-neon hover:text-neon rounded-full transition-all duration-300 text-white font-space text-sm"
+              data-cursor="pointer"
+              aria-label="Close popup"
+            >
+              ✕
+            </button>
+
+            {/* Display Image Container */}
+            <div className="relative w-full h-full flex items-center justify-center rounded-lg overflow-hidden border border-surface-border bg-black select-none shadow-[0_0_60px_rgba(157,3,244,0.2)]">
+              <img
+                src={lightboxImages[lightboxIndex]}
+                alt={`Fullscreen preview ${lightboxIndex + 1}`}
+                className="max-w-full max-h-[75vh] object-contain transition-all duration-300"
+              />
+
+              {/* Prev Navigation Arrow */}
+              {lightboxImages.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightboxIndex((prev) => (prev === 0 ? lightboxImages.length - 1 : prev - 1));
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg/85 border border-surface-border text-white flex items-center justify-center hover:border-neon hover:text-neon text-lg font-bold shadow-lg transition-all duration-200"
+                  data-cursor="pointer"
+                  aria-label="Previous image"
+                >
+                  ←
+                </button>
+              )}
+
+              {/* Next Navigation Arrow */}
+              {lightboxImages.length > 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightboxIndex((prev) => (prev === lightboxImages.length - 1 ? 0 : prev + 1));
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg/85 border border-surface-border text-white flex items-center justify-center hover:border-neon hover:text-neon text-lg font-bold shadow-lg transition-all duration-200"
+                  data-cursor="pointer"
+                  aria-label="Next image"
+                >
+                  →
+                </button>
+              )}
+            </div>
+
+            {/* Status Counter */}
+            <div className="mt-4 px-4 py-1.5 bg-surface/90 border border-surface-border rounded-full font-space text-[10px] text-text-gray tracking-widest uppercase">
+              Image {lightboxIndex + 1} of {lightboxImages.length}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
