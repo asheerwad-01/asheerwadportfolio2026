@@ -14,11 +14,26 @@ export default function CustomCursor() {
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     mousePos.current = { x: e.clientX, y: e.clientY };
-    trailPointsRef.current.push({
-      x: e.clientX,
-      y: e.clientY,
-      age: 0,
-    });
+    
+    const points = trailPointsRef.current;
+    if (points.length === 0) {
+      points.push({ x: e.clientX, y: e.clientY, age: 0 });
+      return;
+    }
+
+    const lastPoint = points[points.length - 1];
+    const dx = e.clientX - lastPoint.x;
+    const dy = e.clientY - lastPoint.y;
+    
+    // Only add a new point if the mouse has moved at least 4 pixels (dx^2 + dy^2 > 16)
+    // to prevent point explosion on high-polling-rate gaming mice.
+    if (dx * dx + dy * dy > 16) {
+      points.push({
+        x: e.clientX,
+        y: e.clientY,
+        age: 0,
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -83,12 +98,18 @@ export default function CustomCursor() {
           points[i].age += 1;
         }
 
-        // Keep points younger than 60 frames (approx 1.0 second) for a much longer and more persistent trail
-        const maxAge = 60;
+        // Keep points younger than 20 frames (approx 330ms) for a much faster fade
+        const maxAge = 20;
         trailPointsRef.current = points.filter((p) => p.age < maxAge);
 
         const activePoints = trailPointsRef.current;
         if (activePoints.length > 1) {
+          // Set canvas properties once outside the loop for high-performance drawing
+          ctx.lineCap = "round";
+          ctx.lineJoin = "round";
+          ctx.shadowColor = "rgba(157, 3, 244, 0.5)";
+          ctx.shadowBlur = 5;
+
           for (let i = 1; i < activePoints.length; i++) {
             const p1 = activePoints[i - 1];
             const p2 = activePoints[i];
@@ -100,17 +121,11 @@ export default function CustomCursor() {
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
 
-            // Thicker trail that feels solid: starts at 5px and tapers down to 1.5px
-            ctx.lineWidth = 3.5 * pct + 1.5; 
+            // Sleeker trail thickness: starts at 3px and tapers down to 1px
+            ctx.lineWidth = 2.0 * pct + 1.0; 
             
-            // Solid, vibrant neon purple/magenta trail with high visibility.
-            ctx.strokeStyle = `rgba(197, 77, 255, ${0.45 + 0.55 * pct})`; 
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-
-            // Add a beautiful neon glow to make the trail look rich and premium
-            ctx.shadowColor = "rgba(157, 3, 244, 0.6)";
-            ctx.shadowBlur = 6;
+            // Fades from 0.8 down to 0.2 opacity
+            ctx.strokeStyle = `rgba(197, 77, 255, ${0.2 + 0.6 * pct})`; 
 
             ctx.stroke();
           }

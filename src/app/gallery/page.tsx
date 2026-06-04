@@ -82,6 +82,8 @@ const VideoGridItem = ({
   onClick: () => void;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const handleMouseEnter = () => {
     if (videoRef.current) {
@@ -92,7 +94,6 @@ const VideoGridItem = ({
   const handleMouseLeave = () => {
     if (videoRef.current) {
       videoRef.current.pause();
-      videoRef.current.currentTime = 0;
     }
   };
 
@@ -107,23 +108,46 @@ const VideoGridItem = ({
       <video
         ref={videoRef}
         src={src}
-        preload="none"
+        preload="metadata"
         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
         muted
         loop
         playsInline
+        onWaiting={() => setIsLoading(true)}
+        onPlaying={() => {
+          setIsLoading(false);
+          setIsPlaying(true);
+        }}
+        onPause={() => setIsPlaying(false)}
+        onSeeking={() => setIsLoading(true)}
+        onSeeked={() => setIsLoading(false)}
+        onCanPlay={() => setIsLoading(false)}
       />
-      {/* Play Icon / Overlay */}
-      <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/10 transition-colors">
-        <div className="w-12 h-12 rounded-full border border-white/30 bg-bg/60 backdrop-blur-sm flex items-center justify-center text-white group-hover:border-neon group-hover:text-neon transition-colors">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M8 5v14l11-7z" />
-          </svg>
+      {/* Play / Loading / Pause Overlay */}
+      <div 
+        className={`absolute inset-0 flex items-center justify-center transition-all duration-300 ${
+          isPlaying 
+            ? "opacity-0 group-hover:opacity-100 bg-black/20" 
+            : "opacity-100 bg-black/40"
+        }`}
+      >
+        <div className="w-12 h-12 rounded-full border border-white/30 bg-bg/60 backdrop-blur-sm flex items-center justify-center text-white group-hover:border-neon group-hover:text-neon transition-colors relative">
+          {isLoading ? (
+            <div className="w-5 h-5 border-2 border-neon border-t-transparent rounded-full animate-spin" />
+          ) : isPlaying ? (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+          ) : (
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          )}
         </div>
       </div>
 
       {/* Dark overlay with title & icon on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5 pointer-events-none">
         <span className="font-space text-[10px] text-neon tracking-widest uppercase mb-1">
           Click to Play
         </span>
