@@ -232,72 +232,85 @@ export default function LabPage() {
           <div className="timeline-line hidden md:block" style={{ left: "30px" }} />
 
           <div className="space-y-8">
-            {LAB_EXPERIMENTS.map((exp) => (
-              <div
-                key={exp.id}
-                className="experiment-card relative flex gap-8 group"
-              >
-                {/* Timeline dot */}
-                <div className="hidden md:flex flex-col items-center pt-8 flex-shrink-0" style={{ width: "60px" }}>
-                  <div className="timeline-dot" />
-                </div>
+            {LAB_EXPERIMENTS.map((exp) => {
+              const expId = exp.id;
+              return (
+                <a
+                  key={expId}
+                  href={exp.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="experiment-card relative flex gap-8 group cursor-pointer no-underline text-left"
+                  data-cursor="pointer"
+                >
+                  {/* Timeline dot */}
+                  <div className="hidden md:flex flex-col items-center pt-8 flex-shrink-0" style={{ width: "60px" }}>
+                    <div className="timeline-dot" />
+                  </div>
 
-                {/* Card */}
-                <div className="flex-1 card-surface overflow-hidden group-hover:border-neon/30 transition-all duration-500">
-                  <div className="flex flex-col md:flex-row">
-                    {/* Left: Content */}
-                    <div className="flex-1 p-6 md:p-8">
-                      <div className="flex items-center gap-4 mb-4">
-                        {/* Big number */}
-                        <span className="font-bebas text-5xl text-neon/30 group-hover:text-neon/60 transition-colors">
-                          {exp.id}
-                        </span>
-
-                        {/* Category badge */}
-                        <span className="px-3 py-1 border border-neon/30 rounded font-space text-[10px] tracking-wider text-neon uppercase group-hover:bg-neon/10 transition-colors">
-                          {exp.category}
-                        </span>
-                      </div>
-
-                      <h3 className="font-bebas text-xl text-white tracking-wide mb-2 uppercase">
-                        {exp.title}
-                      </h3>
-                      <p className="font-space text-xs text-text-gray leading-relaxed mb-4">
-                        {exp.description}
-                      </p>
-
-                      {/* Tools */}
-                      <div className="flex items-center gap-2">
-                        {exp.tools.map((tool, j) => (
-                          <span
-                            key={tool}
-                            className="font-space text-[10px] text-text-dim uppercase tracking-wider"
-                          >
-                            {tool}
-                            {j < exp.tools.length - 1 && (
-                              <span className="ml-2 text-neon/30">•</span>
-                            )}
+                  {/* Card */}
+                  <div className="flex-1 card-surface overflow-hidden group-hover:border-neon/30 transition-all duration-500">
+                    <div className="flex flex-col md:flex-row">
+                      {/* Left: Content */}
+                      <div className="flex-1 p-6 md:p-8">
+                        <div className="flex items-center gap-4 mb-4">
+                          {/* Big number */}
+                          <span className="font-bebas text-5xl text-neon/30 group-hover:text-neon/60 transition-colors">
+                            {expId}
                           </span>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* Right: Thumbnail */}
-                    <div className="w-full md:w-64 h-40 md:h-auto relative overflow-hidden flex-shrink-0">
-                      <div className="absolute inset-0 bg-gradient-to-br from-surface-light to-bg transition-transform duration-700 group-hover:scale-110">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="font-bebas text-3xl text-neon/10 group-hover:text-neon/20 transition-colors">
-                            {exp.id}
+                          {/* Category badge */}
+                          <span className="px-3 py-1 border border-neon/30 rounded font-space text-[10px] tracking-wider text-neon uppercase group-hover:bg-neon/10 transition-colors">
+                            {exp.category}
                           </span>
                         </div>
+
+                        <h3 className="font-bebas text-xl text-white tracking-wide mb-2 uppercase">
+                          {exp.title}
+                        </h3>
+                        <p className="font-space text-xs text-text-gray leading-relaxed mb-4">
+                          {exp.description}
+                        </p>
+
+                        {/* Tools */}
+                        <div className="flex items-center gap-2">
+                          {exp.tools.map((tool, j) => (
+                            <span
+                              key={tool}
+                              className="font-space text-[10px] text-text-dim uppercase tracking-wider"
+                            >
+                              {tool}
+                              {j < exp.tools.length - 1 && (
+                                <span className="ml-2 text-neon/30">•</span>
+                              )}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                      {/* Hover glow */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-neon/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                      {/* Right: Thumbnail */}
+                      <div className="w-full md:w-64 h-40 md:h-auto relative overflow-hidden flex-shrink-0 bg-gradient-to-br from-surface-light to-bg">
+                        {exp.image ? (
+                          <img
+                            src={exp.image}
+                            alt={exp.title}
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="font-bebas text-3xl text-neon/10 group-hover:text-neon/20 transition-colors">
+                              {expId}
+                            </span>
+                          </div>
+                        )}
+                        {/* Hover glow */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-neon/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                </a>
+              );
+            })}
           </div>
         </div>
       </section>

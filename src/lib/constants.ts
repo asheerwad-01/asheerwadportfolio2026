@@ -125,6 +125,7 @@ export const LAB_EXPERIMENTS = [
     description: "A gamified reading platform concept with streaks, challenges, and dark styling.",
     tools: ["Figma", "React", "Tailwind CSS"],
     image: "/Chapter Genesis Dark Theme.jpg",
+    href: "/work/ui-ux",
   },
   {
     id: "02",
@@ -133,6 +134,7 @@ export const LAB_EXPERIMENTS = [
     description: "A high-octane visual sequence beat-synced with custom visual effects.",
     tools: ["After Effects", "Premiere Pro", "VFX"],
     image: "/Marvel Rivals Wolverine.png",
+    href: "/gallery/motion-amv",
   },
   {
     id: "03",
@@ -141,6 +143,7 @@ export const LAB_EXPERIMENTS = [
     description: "A full-stack, responsive e-commerce platform for rubber stamps and corporate items.",
     tools: ["React", "TypeScript", "Vite", "Tailwind CSS"],
     image: "/DM Home.png",
+    href: "/gallery/dm-enterprises",
   },
   {
     id: "04",
@@ -149,6 +152,7 @@ export const LAB_EXPERIMENTS = [
     description: "High CTR promotional thumbnails designed with custom 3D lighting and text styling.",
     tools: ["Photoshop", "Lightroom"],
     image: "/Kaizen Brand Identity.png",
+    href: "/gallery/youtube-thumbnails",
   },
   {
     id: "05",
@@ -157,5 +161,6 @@ export const LAB_EXPERIMENTS = [
     description: "A futuristic web layout incorporating bold typography and smooth custom scroll animations.",
     tools: ["Figma", "GSAP", "React"],
     image: "/Home page.png",
+    href: "/work/ui-ux",
   },
 ] as const;
