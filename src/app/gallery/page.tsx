@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { gsap } from "gsap";
+import { usePageTransition } from "@/components/PageTransition";
 
 interface GalleryData {
   title: string;
@@ -138,6 +139,7 @@ export default function GalleryPage() {
   const { id } = useParams<{ id: string }>();
   const headingRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const { navigateTo } = usePageTransition();
 
   const gallery = id ? GALLERIES[id] : null;
 
@@ -370,7 +372,15 @@ export default function GalleryPage() {
         >
           ✕ Close Tab
         </button>
-        <a href="/" className="inline-flex items-center gap-2 px-6 py-3.5 border border-surface-border bg-surface text-xs tracking-[0.15em] text-text-gray hover:text-white uppercase rounded transition-all duration-300 font-space" data-cursor="pointer">
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            navigateTo("/");
+          }}
+          className="inline-flex items-center gap-2 px-6 py-3.5 border border-surface-border bg-surface text-xs tracking-[0.15em] text-text-gray hover:text-white uppercase rounded transition-all duration-300 font-space"
+          data-cursor="pointer"
+        >
           ← Go to Homepage
         </a>
       </section>

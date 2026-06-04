@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SITE } from "@/lib/constants";
 import StickyNote from "@/components/ui/StickyNote";
 import GhostMascot from "@/components/ui/GhostMascot";
+import { usePageTransition } from "@/components/PageTransition";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -228,6 +229,7 @@ export default function WorkCategoryPage() {
   const { category } = useParams<{ category: string }>();
   const headingRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
+  const { navigateTo } = usePageTransition();
 
   const categoryData = category ? CATEGORY_PROJECTS[category] : null;
 
@@ -455,8 +457,10 @@ export default function WorkCategoryPage() {
                   {project.galleryId ? (
                     <a
                       href={`/gallery/${project.galleryId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigateTo(`/gallery/${project.galleryId}`);
+                      }}
                       className="w-full h-full block relative group/preview cursor-pointer"
                       data-cursor="pointer"
                     >
@@ -576,8 +580,10 @@ export default function WorkCategoryPage() {
                       {project.galleryId && (
                         <a
                           href={`/gallery/${project.galleryId}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigateTo(`/gallery/${project.galleryId}`);
+                          }}
                           className="inline-flex items-center gap-2 px-4 py-2 border border-neon/30 hover:border-neon text-[10px] tracking-widest text-white uppercase rounded hover:bg-neon hover:text-bg transition-all duration-300 font-space font-bold"
                           data-cursor="pointer"
                         >
