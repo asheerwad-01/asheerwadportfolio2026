@@ -6,12 +6,14 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { LAB_EXPERIMENTS } from "@/lib/constants";
 import GhostMascot from "@/components/ui/GhostMascot";
 import StickyNote from "@/components/ui/StickyNote";
+import { usePageTransition } from "@/components/PageTransition";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function LabPage() {
   const headingRef = useRef<HTMLDivElement>(null);
   const experimentsRef = useRef<HTMLDivElement>(null);
+  const { navigateTo } = usePageTransition();
 
   // Heading animation
   useEffect(() => {
@@ -238,8 +240,10 @@ export default function LabPage() {
                 <a
                   key={expId}
                   href={exp.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigateTo(exp.href);
+                  }}
                   className="experiment-card relative flex gap-8 group cursor-pointer no-underline text-left"
                   data-cursor="pointer"
                 >
