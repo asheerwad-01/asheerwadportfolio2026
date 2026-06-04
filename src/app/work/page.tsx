@@ -161,12 +161,21 @@ function ProjectGallery({
 
   return (
     <div className="relative w-full h-full group/gallery overflow-hidden flex items-center justify-center bg-black">
-      {/* Active Image */}
-      <img
-        src={images[currentIndex]}
-        alt={`${title} Screenshot ${currentIndex + 1}`}
-        className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-      />
+      {/* Active Image - click to view in separate window */}
+      <a
+        href={images[currentIndex]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full h-full block cursor-pointer"
+        data-cursor="pointer"
+        title="View full resolution image in separate window"
+      >
+        <img
+          src={images[currentIndex]}
+          alt={`${title} Screenshot ${currentIndex + 1}`}
+          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+        />
+      </a>
 
       {/* Navigation arrows (only if > 1 image) */}
       {images.length > 1 && (
