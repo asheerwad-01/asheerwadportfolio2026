@@ -18,6 +18,7 @@ interface Project {
   tools: string[];
   color: string;
   images?: string[];
+  galleryId?: string;
 }
 
 const CATEGORY_PROJECTS: Record<string, { title: string; subtitle: string; projects: Project[] }> = {
@@ -65,22 +66,27 @@ const CATEGORY_PROJECTS: Record<string, { title: string; subtitle: string; proje
         deliverables: ["Logo Design", "Style Guide", "Typography System", "Marketing Materials"],
         tools: ["Illustrator", "Photoshop"],
         color: "#9D03F4",
+        images: ["/Kaizen Brand Identity.png"],
       },
       {
         id: "02",
-        title: "Cyber City Posters",
-        description: "A dystopian poster series blending street photography with retro-futuristic styling, neon accents, and heavy typography layouts.",
-        deliverables: ["Visual Composition", "Color Correction", "Print Formatting", "Custom Layout Design"],
-        tools: ["Photoshop", "Illustrator"],
+        title: "Youtube Thumbnails/Posters",
+        description: "A collection of high-impact YouTube thumbnails and gaming promotional posters designed to maximize click-through rate (CTR) and engage audiences with bold composition, lighting, and typography.",
+        deliverables: ["CTR Optimization", "3D Style Compositing", "Custom Branding", "Color Grading"],
+        tools: ["Photoshop", "Graphic Design", "Visual Art", "Typography", "3D Lighting"],
         color: "#FF9A00",
+        images: ["/Marvel Rivals Wolverine.png"],
+        galleryId: "youtube-thumbnails",
       },
       {
         id: "03",
-        title: "Synthwave Album Cover",
-        description: "Album artwork featuring custom 3D wireframe grids and hand-crafted liquid gradients for a retro synthwave music project.",
-        deliverables: ["Graphic Art", "Texturing & Lighting", "Asset Creation", "Packaging Design"],
-        tools: ["Photoshop", "Illustrator"],
+        title: "Poster Designs",
+        description: "Creative poster designs combining custom illustration, digital compositing, and visual themes ranging from awareness campaigns to music events.",
+        deliverables: ["Visual Composition", "Color Correction", "Print Formatting", "Custom Layout Design"],
+        tools: ["Photoshop", "Illustrator", "Poster Design", "Compositing", "Typography"],
         color: "#C54DFF",
+        images: ["/YUNG KAI Poster.png"],
+        galleryId: "poster-designs",
       },
     ],
   },
@@ -453,14 +459,35 @@ export default function WorkCategoryPage() {
               className="project-showcase-card card-surface overflow-hidden relative group hover:border-neon/30 transition-all duration-500 hover:shadow-[0_0_40px_rgba(157,3,244,0.06)]"
             >
               <div className="flex flex-col lg:flex-row min-h-[360px]">
-                {/* Left side: Gallery or Placeholder */}
+                {/* Left side: Gallery, Link Preview, or Placeholder */}
                 <div
                   className="w-full lg:w-[400px] h-64 lg:h-auto relative overflow-hidden flex-shrink-0 flex items-center justify-center bg-gradient-to-br from-surface-light to-bg"
                   style={{
                     borderRight: "1px solid var(--color-surface-border)",
                   }}
                 >
-                  {project.images && project.images.length > 0 ? (
+                  {project.galleryId ? (
+                    <a
+                      href={`/gallery/${project.galleryId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full h-full block relative group/preview cursor-pointer"
+                      data-cursor="pointer"
+                    >
+                      <img
+                        src={project.images?.[0]}
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover/preview:scale-105"
+                      />
+                      {/* Overlay text */}
+                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2">
+                        <span className="font-space text-xs text-white tracking-widest uppercase">
+                          View Full Gallery
+                        </span>
+                        <span className="text-neon text-lg">↗</span>
+                      </div>
+                    </a>
+                  ) : project.images && project.images.length > 0 ? (
                     <ProjectGallery
                       images={project.images}
                       title={project.title}
@@ -547,14 +574,32 @@ export default function WorkCategoryPage() {
                     <span className="font-space text-[10px] text-text-dim">
                       ID: {SITE.initials}-{project.id} // 2026_PROJECT
                     </span>
-                    <a
-                      href={getContactLink(project.title)}
-                      className="inline-flex items-center gap-2 px-4 py-2 border border-neon/30 hover:border-neon text-[10px] tracking-widest text-white uppercase rounded hover:bg-neon hover:text-bg transition-all duration-300 font-space font-bold"
-                      data-cursor="pointer"
-                    >
-                      Request Similar Project
-                      <span>→</span>
-                    </a>
+                    <div className="flex gap-3">
+                      {project.galleryId && (
+                        <a
+                          href={`/gallery/${project.galleryId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-4 py-2 border border-neon/30 hover:border-neon text-[10px] tracking-widest text-white uppercase rounded hover:bg-neon hover:text-bg transition-all duration-300 font-space font-bold"
+                          data-cursor="pointer"
+                        >
+                          View Full Gallery
+                          <span>↗</span>
+                        </a>
+                      )}
+                      <a
+                        href={getContactLink(project.title)}
+                        className={`inline-flex items-center gap-2 px-4 py-2 text-[10px] tracking-widest uppercase rounded transition-all duration-300 font-space font-bold ${
+                          project.galleryId
+                            ? "border border-surface-border hover:border-neon/30 text-text-gray hover:text-white"
+                            : "border border-neon/30 hover:border-neon text-white hover:bg-neon hover:text-bg"
+                        }`}
+                        data-cursor="pointer"
+                      >
+                        Request Similar Project
+                        <span>→</span>
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
