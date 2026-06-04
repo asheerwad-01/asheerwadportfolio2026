@@ -8,6 +8,7 @@ interface GalleryData {
   title: string;
   description: string;
   images: string[];
+  link?: string;
 }
 
 const GALLERIES: Record<string, GalleryData> = {
@@ -36,6 +37,100 @@ const GALLERIES: Record<string, GalleryData> = {
       "/Metaversity Event Poster.png",
     ],
   },
+  "motion-amv": {
+    title: "Motion Graphics / AMV",
+    description: "A showcase of high-energy Anime Music Videos (AMVs) and dynamic motion graphics. Featuring stylized video editing, beat-matching, visual effects, and cinematic pacing.",
+    images: [
+      "/MILES MORALES.mp4",
+      "/Jujutsu Kaisen.mp4",
+      "/BLUE.mp4",
+      "/Avatar.mp4",
+      "/GOAT.mp4",
+      "/I WANT TO EAT YOUR PANCREAS.mp4",
+      "/Optimus Prime.mp4",
+      "/One Piece.mp4",
+      "/Spiderman Final.mp4",
+      "/Scarlet Witch.mp4",
+      "/Interstellar Final.mp4",
+      "/Mustang GT Reveal.mp4",
+    ],
+  },
+  "dm-enterprises": {
+    title: "DM Enterprises E-Commerce",
+    description: "A modern, full-stack e-commerce web platform for rubber stamps, trophies, customized gifts, and corporate items. Features dynamic product filtering, seamless checkout, and custom product configuration.",
+    link: "https://dmenterprises-eight.vercel.app/",
+    images: [
+      "/DM Home.png",
+      "/DM Shop.png",
+      "/DM Trophies.png",
+      "/DM Rubber Stamps.png",
+      "/DM Customized Gifts.png",
+      "/DM About Us.png",
+      "/DM Contact.png",
+    ],
+  },
+};
+
+const VideoGridItem = ({
+  src,
+  title,
+  onClick,
+}: {
+  src: string;
+  title: string;
+  onClick: () => void;
+}) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleMouseEnter = () => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+  };
+
+  return (
+    <div
+      className="grid-item card-surface overflow-hidden group cursor-pointer hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.15)] transition-all duration-500 relative aspect-video bg-black"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+      data-cursor="pointer"
+    >
+      <video
+        ref={videoRef}
+        src={src}
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        muted
+        loop
+        playsInline
+      />
+      {/* Play Icon / Overlay */}
+      <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/10 transition-colors">
+        <div className="w-12 h-12 rounded-full border border-white/30 bg-bg/60 backdrop-blur-sm flex items-center justify-center text-white group-hover:border-neon group-hover:text-neon transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
+
+      {/* Dark overlay with title & icon on hover */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+        <span className="font-space text-[10px] text-neon tracking-widest uppercase mb-1">
+          Click to Play
+        </span>
+        <h3 className="font-bebas text-xl text-white tracking-wide uppercase">
+          {title}
+        </h3>
+      </div>
+    </div>
+  );
 };
 
 export default function GalleryPage() {
@@ -197,7 +292,7 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* ═══ IMAGES GRID ═══ */}
+      {/* ═══ IMAGES/VIDEOS GRID ═══ */}
       <section className="px-6 md:px-10 mb-16">
         <div
           ref={gridRef}
@@ -205,10 +300,27 @@ export default function GalleryPage() {
         >
           {gallery.images.map((imgUrl, index) => {
             const fileName = imgUrl.split("/").pop()?.split(".")[0] || "";
+            const isVideo = imgUrl.endsWith(".mp4");
+            const displayName = fileName.replace(/%20/g, " ");
+
+            if (isVideo) {
+              return (
+                <VideoGridItem
+                  key={index}
+                  src={imgUrl}
+                  title={displayName}
+                  onClick={() => {
+                    setLightboxIndex(index);
+                    setLightboxOpen(true);
+                  }}
+                />
+              );
+            }
+
             return (
               <div
                 key={index}
-                className="grid-item card-surface overflow-hidden group cursor-pointer hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.15)] transition-all duration-500 relative aspect-video"
+                className="grid-item card-surface overflow-hidden group cursor-pointer hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.15)] transition-all duration-500 relative aspect-video bg-black"
                 onClick={() => {
                   setLightboxIndex(index);
                   setLightboxOpen(true);
@@ -217,18 +329,18 @@ export default function GalleryPage() {
               >
                 <img
                   src={imgUrl}
-                  alt={fileName}
+                  alt={displayName}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
 
                 {/* Dark overlay with title & icon on hover */}
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-5">
                   <span className="font-space text-[10px] text-neon tracking-widest uppercase mb-1">
                     Click to Expand
                   </span>
                   <h3 className="font-bebas text-xl text-white tracking-wide uppercase">
-                    {fileName.replace(/%20/g, " ")}
+                    {displayName}
                   </h3>
                 </div>
               </div>
@@ -238,10 +350,21 @@ export default function GalleryPage() {
       </section>
 
       {/* Footer Navigation Back */}
-      <section className="px-6 md:px-10 text-center">
+      <section className="px-6 md:px-10 text-center flex flex-wrap items-center justify-center gap-4">
+        {gallery.link && (
+          <a
+            href={gallery.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary"
+            data-cursor="pointer"
+          >
+            Visit Deployed Site ↗
+          </a>
+        )}
         <button
           onClick={() => window.close()}
-          className="btn-primary mr-4"
+          className="inline-flex items-center gap-2 px-6 py-3.5 border border-surface-border bg-surface text-xs tracking-[0.15em] text-text-gray hover:text-white uppercase rounded transition-all duration-300 font-space cursor-pointer"
           data-cursor="pointer"
         >
           ✕ Close Tab
@@ -283,13 +406,23 @@ export default function GalleryPage() {
               ✕
             </button>
 
-            {/* Display Image Container */}
+            {/* Display Container */}
             <div className="relative w-full h-full flex items-center justify-center rounded-lg overflow-hidden border border-surface-border bg-black select-none shadow-[0_0_60px_rgba(157,3,244,0.2)]">
-              <img
-                src={gallery.images[lightboxIndex]}
-                alt={`Expanded view ${lightboxIndex + 1}`}
-                className="max-w-full max-h-[75vh] object-contain"
-              />
+              {gallery.images[lightboxIndex].endsWith(".mp4") ? (
+                <video
+                  src={gallery.images[lightboxIndex]}
+                  className="max-w-full max-h-[75vh] object-contain"
+                  controls
+                  autoPlay
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={gallery.images[lightboxIndex]}
+                  alt={`Expanded view ${lightboxIndex + 1}`}
+                  className="max-w-full max-h-[75vh] object-contain"
+                />
+              )}
 
               {/* Prev Navigation Arrow */}
               {gallery.images.length > 1 && (
@@ -300,7 +433,7 @@ export default function GalleryPage() {
                   }}
                   className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg/85 border border-surface-border text-white flex items-center justify-center hover:border-neon hover:text-neon text-lg font-bold shadow-lg transition-all duration-200"
                   data-cursor="pointer"
-                  aria-label="Previous image"
+                  aria-label="Previous item"
                 >
                   ←
                 </button>
@@ -315,7 +448,7 @@ export default function GalleryPage() {
                   }}
                   className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-bg/85 border border-surface-border text-white flex items-center justify-center hover:border-neon hover:text-neon text-lg font-bold shadow-lg transition-all duration-200"
                   data-cursor="pointer"
-                  aria-label="Next image"
+                  aria-label="Next item"
                 >
                   →
                 </button>
@@ -325,7 +458,7 @@ export default function GalleryPage() {
             {/* Status Counter & Filename */}
             <div className="mt-4 flex flex-col items-center gap-1.5">
               <div className="px-4 py-1.5 bg-surface/90 border border-surface-border rounded-full font-space text-[10px] text-text-gray tracking-widest uppercase">
-                Image {lightboxIndex + 1} of {gallery.images.length}
+                Item {lightboxIndex + 1} of {gallery.images.length}
               </div>
               <span className="font-space text-[11px] text-text-dim uppercase tracking-wider">
                 {gallery.images[lightboxIndex].split("/").pop()?.split(".")[0].replace(/%20/g, " ")}

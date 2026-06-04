@@ -96,11 +96,13 @@ const CATEGORY_PROJECTS: Record<string, { title: string; subtitle: string; proje
     projects: [
       {
         id: "01",
-        title: "Creative Developer Portfolio",
-        description: "This portfolio itself! An immersive showcase utilizing React, Vite, and GSAP ScrollTrigger to build fluid animations and transitions.",
-        deliverables: ["Frontend Architecture", "ScrollTrigger Animation", "Custom Cursor Implementation", "Responsive Coding"],
-        tools: ["React", "TypeScript", "Vite", "Tailwind CSS", "GSAP"],
+        title: "DM Enterprises",
+        description: "DM Enterprises — A modern, full-stack e-commerce web platform for rubber stamps, corporate trophies, customized gifts, and self-inking stamps. Deployed link: https://dmenterprises-eight.vercel.app/",
+        deliverables: ["Product Customizer UI", "E-commerce Product Filtering", "Responsive Frontend Coding", "Backend API Setup"],
+        tools: ["React", "TypeScript", "Vite", "Tailwind CSS", "Node.js", "MongoDB"],
         color: "#9D03F4",
+        images: ["/DM Home.png"],
+        galleryId: "dm-enterprises",
       },
       {
         id: "02",
@@ -121,32 +123,18 @@ const CATEGORY_PROJECTS: Record<string, { title: string; subtitle: string; proje
     ],
   },
   "motion": {
-    title: "Motion Graphics",
-    subtitle: "Animating static elements into energetic visual narratives and glitchy sequences.",
+    title: "Motion Graphics / AMV",
+    subtitle: "Animating static elements into energetic visual narratives and editing glitchy cinematic sequences.",
     projects: [
       {
         id: "01",
-        title: "Glitch Logo Intro 2026",
-        description: "A high-octane 5-second logo reveal featuring audio sync, heavy glitch keyframes, and custom displacement mapping.",
-        deliverables: ["Sound Design Integration", "Glitch Effect Setup", "Keyframe Animation", "Color Grading"],
-        tools: ["After Effects", "Premiere Pro"],
+        title: "Motion Graphics & AMV Showcase",
+        description: "A curated collection of Anime Music Videos (AMVs) and promotional motion graphics utilizing After Effects visual effects, beat synchronization, and custom pacing.",
+        deliverables: ["Video Editing", "VFX & Compositing", "Beat Synchronization", "Sound Design"],
+        tools: ["After Effects", "Premiere Pro", "VFX", "Sound Design"],
         color: "#9D03F4",
-      },
-      {
-        id: "02",
-        title: "Crypton Explainer Video",
-        description: "A clean explain-style motion piece outlining blockchain operations with kinetic typography and vector animations.",
-        deliverables: ["Storyboard Drafting", "Asset Rigging", "Motion Path Animation", "Voiceover Editing"],
-        tools: ["After Effects", "Illustrator"],
-        color: "#FF61F6",
-      },
-      {
-        id: "03",
-        title: "Neon Portal Loop",
-        description: "A seamless 10-second background video loop showcasing a rotating 3D cyberpunk stargate surrounded by particle streams.",
-        deliverables: ["3D Camera Tracking", "Particle Simulation", "Looping Animation", "Post-processing Glows"],
-        tools: ["After Effects", "Premiere Pro"],
-        color: "#C54DFF",
+        images: ["/MILES MORALES.mp4"],
+        galleryId: "motion-amv",
       },
     ],
   },
@@ -167,20 +155,33 @@ function ProjectGallery({
 
   if (!images || images.length === 0) return null;
 
+  const isVideo = images[currentIndex].endsWith(".mp4");
+
   return (
     <div className="relative w-full h-full group/gallery overflow-hidden flex items-center justify-center bg-black">
-      {/* Active Image */}
+      {/* Active Image / Video */}
       <button
         onClick={() => onImageClick(currentIndex)}
         className="w-full h-full block cursor-pointer text-left focus:outline-none"
         data-cursor="pointer"
         title="Click to view fullscreen popup"
       >
-        <img
-          src={images[currentIndex]}
-          alt={`${title} Screenshot ${currentIndex + 1}`}
-          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-        />
+        {isVideo ? (
+          <video
+            src={images[currentIndex]}
+            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            muted
+            loop
+            autoPlay
+            playsInline
+          />
+        ) : (
+          <img
+            src={images[currentIndex]}
+            alt={`${title} Screenshot ${currentIndex + 1}`}
+            className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          />
+        )}
       </button>
 
       {/* Navigation arrows (only if > 1 image) */}
@@ -474,11 +475,22 @@ export default function WorkCategoryPage() {
                       className="w-full h-full block relative group/preview cursor-pointer"
                       data-cursor="pointer"
                     >
-                      <img
-                        src={project.images?.[0]}
-                        alt={project.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover/preview:scale-105"
-                      />
+                      {project.images?.[0].endsWith(".mp4") ? (
+                        <video
+                          src={project.images?.[0]}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover/preview:scale-105"
+                          muted
+                          loop
+                          autoPlay
+                          playsInline
+                        />
+                      ) : (
+                        <img
+                          src={project.images?.[0]}
+                          alt={project.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover/preview:scale-105"
+                        />
+                      )}
                       {/* Overlay text */}
                       <div className="absolute inset-0 bg-black/70 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-2">
                         <span className="font-space text-xs text-white tracking-widest uppercase">
@@ -651,13 +663,23 @@ export default function WorkCategoryPage() {
               ✕
             </button>
 
-            {/* Display Image Container */}
+            {/* Display Image/Video Container */}
             <div className="relative w-full h-full flex items-center justify-center rounded-lg overflow-hidden border border-surface-border bg-black select-none shadow-[0_0_60px_rgba(157,3,244,0.2)]">
-              <img
-                src={lightboxImages[lightboxIndex]}
-                alt={`Fullscreen preview ${lightboxIndex + 1}`}
-                className="max-w-full max-h-[75vh] object-contain transition-all duration-300"
-              />
+              {lightboxImages[lightboxIndex].endsWith(".mp4") ? (
+                <video
+                  src={lightboxImages[lightboxIndex]}
+                  className="max-w-full max-h-[75vh] object-contain"
+                  controls
+                  autoPlay
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={lightboxImages[lightboxIndex]}
+                  alt={`Fullscreen preview ${lightboxIndex + 1}`}
+                  className="max-w-full max-h-[75vh] object-contain transition-all duration-300"
+                />
+              )}
 
               {/* Prev Navigation Arrow */}
               {lightboxImages.length > 1 && (
@@ -692,7 +714,7 @@ export default function WorkCategoryPage() {
 
             {/* Status Counter */}
             <div className="mt-4 px-4 py-1.5 bg-surface/90 border border-surface-border rounded-full font-space text-[10px] text-text-gray tracking-widest uppercase">
-              Image {lightboxIndex + 1} of {lightboxImages.length}
+              Item {lightboxIndex + 1} of {lightboxImages.length}
             </div>
           </div>
         </div>
