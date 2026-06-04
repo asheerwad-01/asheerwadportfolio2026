@@ -450,8 +450,10 @@ export default function HomePage() {
               <a
                 key={item.id}
                 href={`/work/${item.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateTo(`/work/${item.slug}`);
+                }}
                 className="work-card group relative overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-500 hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.1)] block"
                 data-cursor="pointer"
               >
