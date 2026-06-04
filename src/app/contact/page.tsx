@@ -213,6 +213,7 @@ export default function ContactPage() {
       label: "Email",
       value: SITE.email,
       sub: "I usually reply within 24 hrs.",
+      href: `mailto:${SITE.email}`,
     },
     {
       icon: (
@@ -223,6 +224,7 @@ export default function ContactPage() {
       label: "Phone",
       value: SITE.phone,
       sub: "Mon - Sat | 10AM - 7PM",
+      href: `tel:${SITE.phone}`,
     },
     {
       icon: (
@@ -358,27 +360,61 @@ export default function ContactPage() {
             </h2>
 
             <div className="space-y-6">
-              {contactInfo.map((item) => (
-                <div
-                  key={item.label}
-                  className="info-item flex items-start gap-4 group"
-                >
-                  <div className="w-12 h-12 flex-shrink-0 card-surface flex items-center justify-center group-hover:border-neon/30 transition-colors">
-                    {item.icon}
+              {contactInfo.map((item) => {
+                const cardContent = (
+                  <>
+                    <div className="w-12 h-12 flex-shrink-0 card-surface flex items-center justify-center group-hover:border-neon/30 transition-colors">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h4 className="font-space text-xs tracking-[0.15em] text-white uppercase mb-1">
+                        {item.label}
+                      </h4>
+                      <p className="font-space text-sm text-text-gray group-hover:text-neon transition-colors">
+                        {item.value}
+                      </p>
+                      <p className="font-space text-[10px] text-text-dim mt-0.5">
+                        {item.sub}
+                      </p>
+                    </div>
+                  </>
+                );
+
+                if (item.href) {
+                  return (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      className="info-item flex items-start gap-4 group"
+                      data-cursor="pointer"
+                    >
+                      {cardContent}
+                    </a>
+                  );
+                }
+
+                return (
+                  <div
+                    key={item.label}
+                    className="info-item flex items-start gap-4 group"
+                  >
+                    <div className="w-12 h-12 flex-shrink-0 card-surface flex items-center justify-center group-hover:border-neon/30 transition-colors">
+                      {item.icon}
+                    </div>
+                    <div>
+                      <h4 className="font-space text-xs tracking-[0.15em] text-white uppercase mb-1">
+                        {item.label}
+                      </h4>
+                      <p className="font-space text-sm text-text-gray">
+                        {item.value}
+                      </p>
+                      <p className="font-space text-[10px] text-text-dim mt-0.5">
+                        {item.sub}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-space text-xs tracking-[0.15em] text-white uppercase mb-1">
-                      {item.label}
-                    </h4>
-                    <p className="font-space text-sm text-text-gray">
-                      {item.value}
-                    </p>
-                    <p className="font-space text-[10px] text-text-dim mt-0.5">
-                      {item.sub}
-                    </p>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Social Links */}

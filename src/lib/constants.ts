@@ -24,11 +24,11 @@ export const NAV_LINKS = [
 ] as const;
 
 export const SOCIAL_LINKS = [
-  { label: "Instagram", href: "https://instagram.com/", icon: "instagram" },
-  { label: "Behance", href: "https://behance.net/", icon: "behance" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/", icon: "linkedin" },
-  { label: "Discord", href: "https://discord.gg/", icon: "discord" },
-  { label: "YouTube", href: "https://youtube.com/", icon: "youtube" },
+  { label: "Instagram", href: "https://www.instagram.com/_asheerwad_/", icon: "instagram" },
+  { label: "Behance", href: "https://www.behance.net/asheerwadmeher", icon: "behance" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/asheerwad-meher/", icon: "linkedin" },
+  { label: "Discord", href: "https://discord.gg/J5UgaJ9MTu", icon: "discord" },
+  { label: "YouTube", href: "https://www.youtube.com/@kaizen.edit_1", icon: "youtube" },
 ] as const;
 
 export const WORK_ITEMS = [

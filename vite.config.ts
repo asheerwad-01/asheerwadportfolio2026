@@ -7,7 +7,7 @@ import { env } from "process";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: env.VITE_BASE_PATH || '/asheerwadmeher-portfolio/',
+  base: env.VITE_BASE_PATH || '/',
   server: {
     host: true,
   },

@@ -60,7 +60,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 md:px-10 py-8 flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Left: Logo + copyright */}
         <div className="flex items-center gap-4">
-          <div className="font-bebas text-2xl text-neon">AM</div>
+          <div className="relative flex items-center justify-center">
+            <img
+              src="/KaizenEdit.png"
+              alt="Kaizen Edit Logo"
+              className="h-8 w-auto object-contain brightness-100 filter drop-shadow-[0_0_8px_rgba(157,3,244,0.5)]"
+            />
+          </div>
           <div>
             <div className="font-space text-[10px] tracking-[0.15em] text-white uppercase">
               {SITE.name}
