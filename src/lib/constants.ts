@@ -34,6 +34,7 @@ export const SOCIAL_LINKS = [
 export const WORK_ITEMS = [
   {
     id: "01",
+    slug: "ui-ux",
     category: "UI/UX DESIGN",
     subcategories: ["User Interfaces", "Digital Experiences"],
     description: "Designing intuitive and engaging interfaces that deliver seamless user experiences.",
@@ -41,6 +42,7 @@ export const WORK_ITEMS = [
   },
   {
     id: "02",
+    slug: "graphics",
     category: "GRAPHICS DESIGN",
     subcategories: ["Brand Identity", "Visual Design"],
     description: "Crafting impactful visuals that communicate your brand's message with clarity and style.",
@@ -48,6 +50,7 @@ export const WORK_ITEMS = [
   },
   {
     id: "03",
+    slug: "web-dev",
     category: "FULL STACK WEB-D",
     subcategories: ["Frontend", "Backend", "Databases"],
     description: "Building robust, scalable web applications from concept to deployment.",
@@ -55,6 +58,7 @@ export const WORK_ITEMS = [
   },
   {
     id: "04",
+    slug: "motion",
     category: "MOTION GRAPHICS",
     subcategories: ["Animations", "Video Editing"],
     description: "Bringing ideas to life through motion and animation that captivate and engage.",

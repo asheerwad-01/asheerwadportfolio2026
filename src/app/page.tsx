@@ -447,9 +447,12 @@ export default function HomePage() {
           {/* Work Grid - Cinematic Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {WORK_ITEMS.map((item) => (
-              <div
+              <a
                 key={item.id}
-                className="work-card group relative overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-500 hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.1)]"
+                href={`/work/${item.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="work-card group relative overflow-hidden rounded-xl border border-surface-border bg-surface transition-all duration-500 hover:border-neon/30 hover:shadow-[0_0_30px_rgba(157,3,244,0.1)] block"
                 data-cursor="pointer"
               >
                 {/* Project Image */}
@@ -493,7 +496,7 @@ export default function HomePage() {
 
                 {/* Bottom accent line */}
                 <div className="h-px bg-gradient-to-r from-transparent via-neon/40 to-transparent w-0 group-hover:w-full transition-all duration-700 mx-auto" />
-              </div>
+              </a>
             ))}
           </div>
         </div>

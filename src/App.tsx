@@ -5,6 +5,7 @@ import AboutPage from "@/app/about/page";
 import ServicesPage from "@/app/services/page";
 import LabPage from "@/app/lab/page";
 import ContactPage from "@/app/contact/page";
+import WorkCategoryPage from "@/app/work/page";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/lab" element={<LabPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/work/:category" element={<WorkCategoryPage />} />
         </Routes>
       </ClientLayout>
     </BrowserRouter>

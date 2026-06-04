@@ -55,6 +55,20 @@ export default function ContactPage() {
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
 
+  // Pre-populate fields from query parameters (deep linking from project pages)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const subjectParam = params.get("subject");
+    const messageParam = params.get("message");
+    if (subjectParam || messageParam) {
+      setFormData((prev) => ({
+        ...prev,
+        subject: subjectParam || prev.subject,
+        message: messageParam || prev.message,
+      }));
+    }
+  }, []);
+
   // Heading animation
   useEffect(() => {
     if (!headingRef.current) return;
