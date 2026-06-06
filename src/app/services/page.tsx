@@ -202,7 +202,7 @@ export default function ServicesPage() {
 
               <div className="relative w-64 h-80 rounded-2xl overflow-hidden bg-gradient-to-br from-surface-light to-surface border border-surface-border group">
                 <img
-                  src="/Professional Portrait.jpg"
+                  src="/Asheerwad Portrait.png"
                   alt="Asheerwad Meher"
                   className="w-full h-full object-cover filter drop-shadow-[0_0_20px_rgba(157,3,244,0.3)] transition-transform duration-500 group-hover:scale-105"
                 />

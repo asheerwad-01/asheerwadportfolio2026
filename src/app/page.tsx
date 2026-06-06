@@ -363,7 +363,7 @@ export default function HomePage() {
             {/* Portrait Photo in Hero */}
             <div className="relative w-72 h-96 md:w-80 md:h-[28rem] rounded-2xl overflow-hidden border border-surface-border bg-gradient-to-br from-surface-light to-surface group">
               <img
-                src="/Professional Portrait.jpg"
+                src="/Asheerwad Portrait.png"
                 alt="Asheerwad Meher"
                 className="w-full h-full object-cover filter drop-shadow-[0_0_20px_rgba(157,3,244,0.3)] transition-transform duration-500 group-hover:scale-105"
               />

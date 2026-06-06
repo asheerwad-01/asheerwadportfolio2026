@@ -328,7 +328,7 @@ export default function ContactPage() {
 
             <div className="relative w-56 h-72 rounded-2xl overflow-hidden border border-surface-border bg-gradient-to-br from-surface-light to-surface group">
               <img
-                src="/Professional Portrait.jpg"
+                src="/Asheerwad Portrait.png"
                 alt="Asheerwad Meher"
                 className="w-full h-full object-cover filter drop-shadow-[0_0_20px_rgba(157,3,244,0.3)] transition-transform duration-500 group-hover:scale-105"
               />

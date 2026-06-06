@@ -385,26 +385,54 @@ export default function AboutPage() {
               impact.
             </p>
 
-            <button
-              className="btn-primary mt-8"
-              data-cursor="pointer"
-            >
-              Download CV
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            <div className="flex flex-wrap items-center gap-4 mt-8">
+              <a
+                href="/Asheerwad_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary"
+                data-cursor="pointer"
               >
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-            </button>
+                View CV
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
+              </a>
+
+              <a
+                href="/Asheerwad_CV.pdf"
+                download="Asheerwad_CV.pdf"
+                className="btn-primary"
+                data-cursor="pointer"
+              >
+                Download CV
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+              </a>
+            </div>
           </div>
 
           {/* Right: Portrait + decorations */}
@@ -420,7 +448,7 @@ export default function AboutPage() {
 
             <div className="relative w-72 h-96 rounded-2xl overflow-hidden border border-surface-border bg-gradient-to-br from-surface-light to-surface group">
               <img
-                src="/Professional Portrait.jpg"
+                src="/Asheerwad Portrait.png"
                 alt="Asheerwad Meher"
                 className="w-full h-full object-cover filter drop-shadow-[0_0_20px_rgba(157,3,244,0.3)] transition-transform duration-500 group-hover:scale-105"
               />
