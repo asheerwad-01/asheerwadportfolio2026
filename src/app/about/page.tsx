@@ -117,6 +117,8 @@ export default function AboutPage() {
   const skillsRef = useRef<HTMLDivElement>(null);
   const toolsRef = useRef<HTMLDivElement>(null);
   const storyRef = useRef<HTMLDivElement>(null);
+  const [showCvPreview, setShowCvPreview] = useState(false);
+  const [cvZoomed, setCvZoomed] = useState(false);
 
   // Heading animation
   useEffect(() => {
@@ -386,10 +388,8 @@ export default function AboutPage() {
             </p>
 
             <div className="flex flex-wrap items-center gap-4 mt-8">
-              <a
-                href="/Asheerwad_CV.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={() => setShowCvPreview(true)}
                 className="btn-primary"
                 data-cursor="pointer"
               >
@@ -408,11 +408,11 @@ export default function AboutPage() {
                   <polyline points="15 3 21 3 21 9" />
                   <line x1="10" y1="14" x2="21" y2="3" />
                 </svg>
-              </a>
+              </button>
 
               <a
-                href="/Asheerwad_CV.pdf"
-                download="Asheerwad_CV.pdf"
+                href="/ASHEERWAD MEHER RESUME.pdf"
+                download="ASHEERWAD MEHER RESUME.pdf"
                 className="btn-primary"
                 data-cursor="pointer"
               >
@@ -616,6 +616,69 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+      {/* ═══ CV PREVIEW MODAL ═══ */}
+      {showCvPreview && (
+        <div
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm"
+          onClick={() => { setShowCvPreview(false); setCvZoomed(false); }}
+        >
+          {/* Top bar: zoom hint + close button */}
+          <div
+            className="absolute top-0 left-0 right-0 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4 z-20"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Zoom hint */}
+            <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-surface/90 backdrop-blur border border-surface-border rounded-full">
+              <span className="font-space text-[9px] sm:text-[10px] tracking-[0.15em] text-text-gray uppercase">
+                {cvZoomed ? "Scroll to read • Click image to zoom out" : "Click image to zoom in"}
+              </span>
+            </div>
+
+            {/* Close button */}
+            <button
+              onClick={() => { setShowCvPreview(false); setCvZoomed(false); }}
+              className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-full border border-surface-border bg-surface/90 text-white hover:border-neon/50 hover:text-neon transition-all duration-300 flex-shrink-0 ml-3"
+              data-cursor="pointer"
+              aria-label="Close preview"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Image container */}
+          <div
+            className={`relative rounded-2xl border border-surface-border shadow-[0_0_60px_rgba(157,3,244,0.15)] transition-all duration-300 ${
+              cvZoomed
+                ? "w-[95vw] sm:w-[90vw] max-w-4xl max-h-[85vh] overflow-y-auto overflow-x-hidden cursor-zoom-out"
+                : "w-auto max-w-[95vw] sm:max-w-[90vw] max-h-[85vh] overflow-hidden cursor-zoom-in"
+            }`}
+            style={{ marginTop: cvZoomed ? "3.5rem" : "0" }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCvZoomed(!cvZoomed);
+            }}
+            onWheel={(e) => {
+              if (cvZoomed) {
+                e.stopPropagation();
+              }
+            }}
+          >
+            <img
+              src="/ASHEERWAD MEHER RESUME.webp"
+              alt="Asheerwad Meher Resume"
+              className={`block transition-all duration-300 pointer-events-none select-none ${
+                cvZoomed
+                  ? "w-full h-auto"
+                  : "w-auto h-[85vh] max-h-[85vh] object-contain mx-auto"
+              }`}
+              draggable={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
